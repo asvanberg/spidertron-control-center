@@ -200,27 +200,39 @@ do
     end
 
     if action == "remote" then
-      if player.cursor_stack.valid_for_read then -- hand is not empty
+      local cursor = player.cursor_stack
+      if not (cursor and cursor.valid) then
+        player.create_local_flying_text({
+          text = {"error.not-available-in-spectator-mode"},
+          create_at_cursor = true
+        })
+      elseif cursor.valid_for_read then -- hand is not empty
         player.create_local_flying_text({
           text = {"error.clear-cursor"},
           create_at_cursor = true
         })
       else
-        player.cursor_stack.set_stack({name="scc-spidertron-remote"})
-        player.cursor_stack.connected_entity = spidertron
+        cursor.set_stack({name="scc-spidertron-remote"})
+        cursor.connected_entity = spidertron
       end
     elseif action == "call" then
       go_to_position(spidertron, player.position)
     elseif action == "home" then
       if event.shift then
-        if player.cursor_stack.valid_for_read then -- hand is not empty
+        local cursor = player.cursor_stack
+        if not (cursor and cursor.valid) then
+          player.create_local_flying_text({
+            text = {"error.not-available-in-spectator-mode"},
+            create_at_cursor = true
+          })
+        elseif cursor.valid_for_read then -- hand is not empty
           player.create_local_flying_text({
             text = {"error.clear-cursor"},
             create_at_cursor = true
           })
         else
           global.players[event.player_index].setting_home_for = spidertron
-          player.cursor_stack.set_stack({name="scc-set-home-tool"})
+          cursor.set_stack({name="scc-set-home-tool"})
         end
       else
         local home_position = global.players[event.player_index].home[spidertron.unit_number]
