@@ -6,6 +6,8 @@ global.players = {}
 global.path_requests = {}
 -- unit_number -> entity
 global.spidertrons = {}
+-- unit_number -> player_index (follow player on autopiloting done)
+global.follow_after_autopilot = {}
 
 do
   local function create_player_data(player_index)
@@ -31,6 +33,10 @@ do
       create_player_data(index)
       update_gui(index)
     end
+  end)
+
+  script.on_configuration_changed(function()
+    global.follow_after_autopilot = {}
   end)
 
   script.on_event(defines.events.on_player_created, function(event)
@@ -200,6 +206,7 @@ do
     end
 
     if action == "remote" then
+      global.follow_after_autopilot[spidertron.unit_number] = nil
       local cursor = player.cursor_stack
       if not (cursor and cursor.valid) then
         player.create_local_flying_text({
@@ -217,6 +224,11 @@ do
       end
     elseif action == "call" then
       go_to_position(spidertron, player.position)
+      if event.shift then
+        global.follow_after_autopilot[spidertron.unit_number] = event.player_index
+      else
+        global.follow_after_autopilot[spidertron.unit_number] = nil
+      end
     elseif action == "home" then
       if event.shift then
         local cursor = player.cursor_stack
@@ -235,6 +247,7 @@ do
           cursor.set_stack({name="scc-set-home-tool"})
         end
       else
+        global.follow_after_autopilot[spidertron.unit_number] = nil
         local home_position = global.players[event.player_index].home[spidertron.unit_number]
         if home_position then
           go_to_position(spidertron, home_position)
@@ -248,6 +261,22 @@ do
     end
   end)
 end
+
+script.on_event(defines.events.on_spider_command_completed, function(event)
+  local spidertron = event.vehicle
+  if spidertron and spidertron.valid then
+    local player_index_to_follow = global.follow_after_autopilot[spidertron.unit_number]
+    if player_index_to_follow then
+      local player = game.get_player(player_index_to_follow)
+      if player and player.valid then
+        local character = player.character
+        if character and character.valid then
+          spidertron.follow_target = character
+        end
+      end
+    end
+  end
+end)
 
 do
   local function deduplicate_path(start, path)
