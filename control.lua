@@ -20,10 +20,16 @@ do
   local function populate_initial_spidertrons()
     for _, surface in pairs(game.surfaces) do
       for _, spidertron in pairs(surface.find_entities_filtered({type = "spider-vehicle"})) do
-        if spidertron.valid then
+        if spidertron.valid and spidertron.name ~= "companion" then
           global.spidertrons[spidertron.unit_number] = spidertron
         end
       end
+    end
+  end
+
+  local function update_all_guis()
+    for player_index, _ in pairs(game.players) do
+      update_gui(player_index)
     end
   end
 
@@ -37,6 +43,12 @@ do
 
   script.on_configuration_changed(function()
     global.follow_after_autopilot = {}
+    for unit_number, spidertron in pairs(global.spidertrons) do
+      if spidertron.name == "companion" then
+        global.spidertrons[unit_number] = nil
+      end
+    end
+    update_all_guis()
   end)
 
   script.on_event(defines.events.on_player_created, function(event)
@@ -52,15 +64,12 @@ do
     global.players[event.player_index] = nil
   end)
 
-  local function update_all_guis()
-    for player_index, _ in pairs(game.players) do
-      update_gui(player_index)
-    end
-  end
-
   -- spidertron built
   do
     local function spidertron_built(spidertron_entity)
+      if spidertron_entity.name == "companion" then
+        return
+      end
       global.spidertrons[spidertron_entity.unit_number] = spidertron_entity
       -- TODO update only specific force/surface for performance
       update_all_guis()
