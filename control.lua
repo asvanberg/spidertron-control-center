@@ -47,6 +47,7 @@ do
       if spidertron.name == "companion" then
         global.spidertrons[unit_number] = nil
       end
+      script.register_on_entity_destroyed(spidertron)
     end
     update_all_guis()
   end)
@@ -66,11 +67,16 @@ do
 
   -- spidertron built
   do
+    local function is_blacklisted(spidertron_entity_name)
+      return spidertron_entity_name == "companion"
+          or spidertron_entity_name == "spidertron-enhancements-dummy-spidertron"
+    end
     local function spidertron_built(spidertron_entity)
-      if spidertron_entity.name == "companion" then
+      if is_blacklisted(spidertron_entity.name) then
         return
       end
       global.spidertrons[spidertron_entity.unit_number] = spidertron_entity
+      script.register_on_entity_destroyed(spidertron_entity)
       -- TODO update only specific force/surface for performance
       update_all_guis()
     end
@@ -81,13 +87,14 @@ do
   -- spidertron destroyed
   do
     local function spidertron_destroyed(event)
-      global.spidertrons[event.entity.unit_number] = nil
+      if not event.unit_number or not global.spidertrons[event.unit_number] then
+        return
+      end
+      global.spidertrons[event.unit_number] = nil
       -- TODO update only specific force/surface for performance
       update_all_guis()
     end
-    script.on_event(defines.events.on_entity_died, spidertron_destroyed, {{filter = "type", type = "spider-vehicle"}})
-    script.on_event(defines.events.on_player_mined_entity, spidertron_destroyed, {{filter = "type", type = "spider-vehicle"}})
-    script.on_event(defines.events.script_raised_destroy, spidertron_destroyed, {{filter = "type", type = "spider-vehicle"}})
+    script.on_event(defines.events.on_entity_destroyed, spidertron_destroyed)
   end
 
   script.on_event(defines.events.on_entity_renamed, function(event)
