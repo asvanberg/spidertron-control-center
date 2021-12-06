@@ -341,6 +341,7 @@ end
 
 do
   script.on_event(defines.events.on_player_selected_area, function(event)
+    if event.item ~= "scc-set-home-tool" then return end
     local spidertron = global.players[event.player_index].setting_home_for
     if spidertron then
       local center =
