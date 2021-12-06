@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.3
+Date: 2021-12-06
+  Bugfixes:
+    - Only set new home for spidertrons if the correct tool is used. (See https://github.com/asvanberg/spidertron-control-center/issues/1)
+
+---------------------------------------------------------------------------------------------------
 Version: 1.1.2
 Date: 2021-10-26
   Compatibility:
