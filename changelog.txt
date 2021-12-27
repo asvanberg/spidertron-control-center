@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.4
+Date: 2021-12-27
+  Bugfixes:
+    - Do not allow controlling spidertrons being driven by other players (See https://mods.factorio.com/mod/spidertron-control-center/discussion/61c6bc326881b7138a622909)
+
+---------------------------------------------------------------------------------------------------
 Version: 1.1.3
 Date: 2021-12-06
   Bugfixes:
