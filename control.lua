@@ -221,6 +221,18 @@ do
       return
     end
 
+    local driver = spidertron.get_driver()
+    if driver and driver.valid then
+      local driving_player = driver.is_player() and driver or driver.player
+      if driving_player and driving_player.valid and driving_player.index ~= player.index then
+        player.create_local_flying_text({
+          text = {"error.other-player-is-driving"},
+          create_at_cursor = true
+        })
+        return
+      end
+    end
+
     if action == "remote" then
       global.follow_after_autopilot[spidertron.unit_number] = nil
       local cursor = player.cursor_stack
