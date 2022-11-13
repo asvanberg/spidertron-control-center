@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.2.1
+Date: 2022-11-13
+  Compatibility:
+    - Spidertrons no longer disappear when using Spidertron Weapon Switcher (See https://mods.factorio.com/mod/spidertron-control-center/discussion/61e3eee9bd300c3b38ef1b30)
+---------------------------------------------------------------------------------------------------
 Version: 1.2.0
 Date: 2022-11-13
   Features:
