@@ -33,12 +33,52 @@ do
     end
   end
 
+  local function mod_compatibility()
+    -- Compatibility: Spidertron Weapon Switcher
+    do
+      if remote.interfaces["SpidertronWeaponSwitcher"] then
+        local sws_events = remote.call("SpidertronWeaponSwitcher", "get_events")
+        script.on_event(sws_events.on_spidertron_switched, function(event)
+          local new_unit_number = event.new_spidertron.unit_number
+          local old_unit_number = event.old_spidertron.unit_number
+
+          -- Restore home position
+          for _, data in pairs(global.players) do
+            local old_home = data.home[old_unit_number]
+            data.home[new_unit_number] = old_home
+            data.home[old_unit_number] = nil
+          end
+          -- Restore pathing requests
+          for path_request_id, target in pairs(global.path_requests) do
+            if target.spidertron.unit_number == old_unit_number then
+              target.spidertron = event.new_spidertron
+            end
+          end
+          -- Update spidertron list
+          global.spidertrons[new_unit_number] = event.new_spidertron
+          global.spidertrons[old_unit_number] = nil
+
+          -- Restore autofollow
+          global.follow_after_autopilot[new_unit_number] = global.follow_after_autopilot[old_unit_number]
+          global.follow_after_autopilot[old_unit_number] = nil
+
+          update_all_guis()
+        end)
+      end
+    end
+  end
+
   script.on_init(function()
     populate_initial_spidertrons()
     for index, _ in pairs(game.players) do
       create_player_data(index)
       update_gui(index)
     end
+    mod_compatibility()
+  end)
+
+  script.on_load(function()
+    mod_compatibility()
   end)
 
   script.on_configuration_changed(function()
