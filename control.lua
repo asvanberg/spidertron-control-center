@@ -174,6 +174,15 @@ do
       })
       home_button.style.height = 28
       home_button.style.width = 28
+
+      local map_button = spidertron_flow.add({
+        type = "sprite-button",
+        sprite = "entity/radar",
+        tags = {["scc-action"] = "window_spidertron", ["scc-unit-number"] = spidertron.unit_number},
+        tooltip = {"tooltip.map-view"}
+      })
+      map_button.style.height = 28
+      map_button.style.width = 28
     end
 
     -- Show frame if there's something to show
@@ -205,6 +214,10 @@ do
     global.path_requests[path_request_id] = { spidertron = spidertron_entity, request = request }
   end
 
+  local function window_spidertron(spidertron_entity, player)
+    player.open_map(spidertron_entity.position, .1)
+  end
+
   script.on_event(defines.events.on_gui_click, function(event)
     local action = event.element.tags["scc-action"]
     if not action then
@@ -233,6 +246,9 @@ do
       end
     end
 
+    if action == "window_spidertron" then
+      window_spidertron(spidertron, player)
+    end
     if action == "remote" then
       global.follow_after_autopilot[spidertron.unit_number] = nil
       local cursor = player.cursor_stack
