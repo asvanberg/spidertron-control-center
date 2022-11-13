@@ -140,7 +140,23 @@ do
 
     gui.list.clear()
 
+    local spidertrons_sorted_by_name = {}
     for _, spidertron in valid_spidertrons_for_force_and_surface(global.spidertrons, player.force, player.surface) do
+      table.insert(spidertrons_sorted_by_name, spidertron)
+    end
+    table.sort(spidertrons_sorted_by_name, function(s1, s2)
+      if s1.entity_label and s2.entity_label then
+        return s1.entity_label < s2.entity_label
+      elseif s1.entity_label then
+        return true
+      elseif s2.entity_label then
+        return false
+      else
+        return s1.unit_number < s2.unit_number
+      end
+    end)
+
+    for _, spidertron in pairs(spidertrons_sorted_by_name) do
       local spidertron_flow = gui.list.add({type = "flow", direction = "horizontal"})
       spidertron_flow.style.vertical_align = "center"
       spidertron_flow.add({type = "label", caption = spidertron.entity_label or spidertron.prototype.localised_name})
