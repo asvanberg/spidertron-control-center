@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.2.0
+Date: 2022-11-13
+  Features:
+    - Button to zoom to the spidertron on the map (See https://github.com/asvanberg/spidertron-control-center/pull/4)
+  Info:
+    - Spidertrons are now sorted by name (See https://github.com/asvanberg/spidertron-control-center/issues/2)
+---------------------------------------------------------------------------------------------------
 Version: 1.1.4
 Date: 2021-12-27
   Bugfixes:
