@@ -262,7 +262,7 @@ do
       start = spidertron_entity.position,
       goal = target_position,
       force = spidertron_entity.force,
-      pathfinder_flags = {
+      pathfind_flags = {
         prefer_straight_paths = true
       }
     }
