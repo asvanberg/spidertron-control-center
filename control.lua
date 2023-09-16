@@ -263,7 +263,8 @@ do
       goal = target_position,
       force = spidertron_entity.force,
       pathfind_flags = {
-        prefer_straight_paths = true
+        prefer_straight_paths = true,
+        cache = false,
       }
     }
     local path_request_id = spidertron_entity.surface.request_path(request)
