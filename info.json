@@ -1,6 +1,6 @@
 {
   "name": "spidertron-control-center",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "title": "Spidertron control center",
   "author": "Feidan",
   "description": "Adds a window to easily manage your spidertrons. Call them to your current location, get a connected remote, or make them go home, home is specified per spidertron.",
