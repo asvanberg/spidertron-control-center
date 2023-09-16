@@ -182,7 +182,9 @@ do
 
     local spidertrons_sorted_by_name = {}
     for _, spidertron in valid_spidertrons_for_force_and_surface(global.spidertrons, player.force, player.surface) do
-      table.insert(spidertrons_sorted_by_name, spidertron)
+      if not spidertron.entity_label or not spidertron.entity_label:find("^%-%-") then
+        table.insert(spidertrons_sorted_by_name, spidertron)
+      end
     end
     table.sort(spidertrons_sorted_by_name, function(s1, s2)
       if s1.entity_label and s2.entity_label then
