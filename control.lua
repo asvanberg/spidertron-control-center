@@ -368,6 +368,7 @@ end
 script.on_event(defines.events.on_spider_command_completed, function(event)
   local spidertron = event.vehicle
   if spidertron and spidertron.valid then
+    if #spidertron.autopilot_destinations > 0 then return end
     local player_index_to_follow = global.follow_after_autopilot[spidertron.unit_number]
     if player_index_to_follow then
       local player = game.get_player(player_index_to_follow)
