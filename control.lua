@@ -84,7 +84,7 @@ do
   script.on_configuration_changed(function()
     global.follow_after_autopilot = {}
     for unit_number, spidertron in pairs(global.spidertrons) do
-      if spidertron.name == "companion" then
+      if not spidertron.valid or spidertron.name == "companion" then
         global.spidertrons[unit_number] = nil
       end
       script.register_on_entity_destroyed(spidertron)
